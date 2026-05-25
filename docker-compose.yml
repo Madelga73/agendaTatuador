@@ -1,0 +1,325 @@
+services:
+  mysql-cliente:
+    image: mysql:8.0
+    container_name: mysql-cliente
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: cliente_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_cliente_data:/var/lib/mysql
+
+  mysql-ayudante:
+    image: mysql:8.0
+    container_name: mysql-ayudante
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: ayudante_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_ayudante_data:/var/lib/mysql
+
+  mysql-estudio:
+    image: mysql:8.0
+    container_name: mysql-estudio
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: estudio_db
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_estudio_data:/var/lib/mysql
+
+  mysql-vendedor:
+    image: mysql:8.0
+    container_name: mysql-vendedor
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: vendedor_db
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql_vendedor_data:/var/lib/mysql
+
+  mysql-pago:
+    image: mysql:8.0
+    container_name: mysql-pago
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: pago_db
+    ports:
+      - "3310:3306"
+    volumes:
+      - mysql_pago_data:/var/lib/mysql
+
+  mysql-tatuador:
+    image: mysql:8.0
+    container_name: mysql-tatuador
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: tatuador_db
+    ports:
+      - "3311:3306"
+    volumes:
+      - mysql_tatuador_data:/var/lib/mysql
+
+  mysql-tatuaje:
+    image: mysql:8.0
+    container_name: mysql-tatuaje
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: tatuaje_db
+    ports:
+      - "3312:3306"
+    volumes:
+      - mysql_tatuaje_data:/var/lib/mysql
+
+  mysql-sesion:
+    image: mysql:8.0
+    container_name: mysql-sesion
+    restart: always
+    environment:
+      AYUDANTE_SERVICE_URL: http://ayudante-app:8082
+      CLIENTE_SERVICE_URL: http://cliente-app:8081
+      ESTUDIO_SERVICE_URL: http://estudio-app:8083
+      PAGO_SERVICE_URL: http://pago-app:8085
+      TATUADOR_SERVICE_URL: http://tatuador-app:8086
+      TATUAJE_SERVICE_URL: http://tatuaje-app:8087
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: sesion_db
+    ports:
+      - "3313:3306"
+    volumes:
+      - mysql_sesion_data:/var/lib/mysql
+
+  mysql-inventario:
+    image: mysql:8.0
+    container_name: mysql-inventario
+    restart: always
+    environment:
+      VENDEDOR_SERVICE_URL: http://vendedor-app:8084
+      TATUADOR_SERVICE_URL: http://tatuador-app:8086
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: inventario_db
+    ports:
+      - "3315:3306"
+    volumes:
+      - mysql_inventario_data:/var/lib/mysql
+
+  mysql-resultado:
+    image: mysql:8.0
+    container_name: mysql-resultado
+    restart: always
+    environment:
+      CLIENTE_SERVICE_URL: http://cliente-app:8081
+      TATUAJE_SERVICE_URL: http://tatuaje-app:8087
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: resultado_db
+    ports:
+      - "3314:3306"
+    volumes:
+      - mysql_resultado_data:/var/lib/mysql
+
+  cliente-app:
+    build:
+      context: ./cliente
+      dockerfile: Dockerfile
+    container_name: cliente-app
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-cliente:3306/cliente_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+    depends_on:
+      - mysql-cliente
+
+  ayudante-app:
+    build:
+      context: ./ayudante
+      dockerfile: Dockerfile
+    container_name: ayudante-app
+    restart: always
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-ayudante:3306/ayudante_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+    depends_on:
+      - mysql-ayudante
+
+  estudio-app:
+    build:
+      context: ./estudio
+      dockerfile: Dockerfile
+    container_name: estudio-app
+    restart: always
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-estudio:3306/estudio_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+    depends_on:
+      - mysql-estudio
+
+  vendedor-app:
+    build:
+      context: ./vendedor
+      dockerfile: Dockerfile
+    container_name: vendedor-app
+    restart: always
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-vendedor:3306/vendedor_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+    depends_on:
+      - mysql-vendedor
+
+  pago-app:
+    build:
+      context: ./pago
+      dockerfile: Dockerfile
+    container_name: pago-app
+    restart: always
+    ports:
+      - "8085:8085"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-pago:3306/pago_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+    depends_on:
+      - mysql-pago   
+
+  tatuador-app:
+    build:
+      context: ./tatuador
+      dockerfile: Dockerfile
+    container_name: tatuador-app
+    restart: always
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-tatuador:3306/tatuador_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+    depends_on:
+      - mysql-tatuador
+
+  tatuaje-app:
+    build:
+      context: ./tatuaje
+      dockerfile: Dockerfile
+    container_name: tatuaje-app
+    restart: always
+    ports:
+      - "8087:8087"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-tatuaje:3306/tatuaje_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+    depends_on:
+      - mysql-tatuaje
+
+  sesion-app:
+    build:
+      context: ./sesion
+      dockerfile: Dockerfile
+
+    container_name: sesion-app
+    restart: always
+
+    ports:
+      - "8088:8088"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-sesion:3306/sesion_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+
+      AYUDANTE_SERVICE_URL: http://ayudante-app:8082
+      CLIENTE_SERVICE_URL: http://cliente-app:8081
+      ESTUDIO_SERVICE_URL: http://estudio-app:8083
+      PAGO_SERVICE_URL: http://pago-app:8085
+      TATUADOR_SERVICE_URL: http://tatuador-app:8086
+      TATUAJE_SERVICE_URL: http://tatuaje-app:8087
+
+    depends_on:
+      - mysql-sesion
+      - cliente-app
+      - ayudante-app
+      - estudio-app
+      - pago-app
+      - tatuador-app
+      - tatuaje-app
+
+  inventario-app:
+    build:
+      context: ./inventario
+      dockerfile: Dockerfile
+    container_name: inventario-app
+    restart: always
+    ports:
+      - "8089:8089"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-inventario:3306/inventario_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+
+      VENDEDOR_SERVICE_URL: http://vendedor-app:8084
+      TATUADOR_SERVICE_URL: http://tatuador-app:8086
+
+    depends_on:
+      - mysql-inventario
+      - tatuador-app
+      - vendedor-app
+
+  resultado-app:
+    build:
+      context: ./resultado
+      dockerfile: Dockerfile
+
+    container_name: resultado-app
+    restart: always
+
+    ports:
+      - "8090:8090"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-resultado:3306/resultado_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+
+      CLIENTE_SERVICE_URL: http://cliente-app:8081
+      TATUAJE_SERVICE_URL: http://tatuaje-app:8087
+
+    depends_on:
+      - mysql-resultado
+      - cliente-app
+      - tatuaje-app
+
+volumes:
+  mysql_cliente_data:
+  mysql_ayudante_data:
+  mysql_estudio_data:
+  mysql_vendedor_data:
+  mysql_pago_data:
+  mysql_tatuador_data:
+  mysql_tatuaje_data:
+  mysql_sesion_data:
+  mysql_inventario_data:
+  mysql_resultado_data:
