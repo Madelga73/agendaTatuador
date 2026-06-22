@@ -1,0 +1,181 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+
+            - id: cliente
+              uri: http://cliente-app:8081
+              predicates:
+                - Path=/api/v1/clientes/**
+
+            - id: cliente-docs
+              uri: http://cliente-app:8081
+              predicates:
+                - Path=/cliente/v3/api-docs
+              filters:
+                - StripPrefix=1
+
+            - id: ayudante
+              uri: http://ayudante-app:8082
+              predicates:
+                - Path=/api/v1/ayudantes/**
+
+            - id: ayudante-docs
+              uri: http://ayudante-app:8082
+              predicates:
+                - Path=/ayudante/v3/api-docs
+              filters:
+                - StripPrefix=1
+
+            - id: estudio
+              uri: http://estudio-app:8083
+              predicates:
+                - Path=/api/v1/estudios/**
+
+            - id: estudio-docs
+              uri: http://estudio-app:8083
+              predicates:
+                - Path=/estudio/v3/api-docs
+              filters:
+                - StripPrefix=1
+
+            - id: vendedor
+              uri: http://vendedor-app:8084
+              predicates:
+                - Path=/api/v1/vendedores/**
+
+            - id: vendedor-docs
+              uri: http://vendedor-app:8084
+              predicates:
+                - Path=/vendedor/v3/api-docs
+              filters:
+                - StripPrefix=1
+
+            - id: pago
+              uri: http://pago-app:8085
+              predicates:
+                - Path=/api/v1/pagos/**
+
+            - id: pago-docs
+              uri: http://pago-app:8085
+              predicates:
+                - Path=/pago/v3/api-docs
+              filters:
+                - StripPrefix=1
+
+            - id: tatuador
+              uri: http://tatuador-app:8086
+              predicates:
+                - Path=/api/v1/tatuadores/**
+
+            - id: tatuador-docs
+              uri: http://tatuador-app:8086
+              predicates:
+                - Path=/tatuador/v3/api-docs
+              filters:
+                - StripPrefix=1
+
+            - id: tatuaje
+              uri: http://tatuaje-app:8087
+              predicates:
+                - Path=/api/v1/tatuajes/**
+
+            - id: tatuaje-docs
+              uri: http://tatuaje-app:8087
+              predicates:
+                - Path=/tatuaje/v3/api-docs
+              filters:
+                - StripPrefix=1
+
+            - id: sesion
+              uri: http://sesion-app:8088
+              predicates:
+                - Path=/api/v1/sesiones/**
+
+            - id: sesion-docs
+              uri: http://sesion-app:8088
+              predicates:
+                - Path=/sesion/v3/api-docs
+              filters:
+                - StripPrefix=1
+
+            - id: inventario
+              uri: http://inventario-app:8089
+              predicates:
+                - Path=/api/v1/inventarios/**
+
+            - id: inventario-docs
+              uri: http://inventario-app:8089
+              predicates:
+                - Path=/inventario/v3/api-docs
+              filters:
+                - StripPrefix=1
+
+            - id: resultado
+              uri: http://resultado-app:8090
+              predicates:
+                - Path=/api/v1/resultados/**
+
+            - id: resultado-docs
+              uri: http://resultado-app:8090
+              predicates:
+                - Path=/resultado/v3/api-docs
+              filters:
+                - StripPrefix=1
+
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    urls:
+      - name: Cliente
+        url: /cliente/v3/api-docs
+
+      - name: Ayudante
+        url: /ayudante/v3/api-docs
+
+      - name: Estudio
+        url: /estudio/v3/api-docs
+
+      - name: Vendedor
+        url: /vendedor/v3/api-docs
+
+      - name: Pago
+        url: /pago/v3/api-docs
+
+      - name: Tatuador
+        url: /tatuador/v3/api-docs
+
+      - name: Tatuaje
+        url: /tatuaje/v3/api-docs
+
+      - name: Sesion
+        url: /sesion/v3/api-docs
+
+      - name: Inventario
+        url: /inventario/v3/api-docs
+
+      - name: Resultado
+        url: /resultado/v3/api-docs
+
