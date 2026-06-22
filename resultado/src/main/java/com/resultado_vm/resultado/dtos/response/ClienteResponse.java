@@ -1,0 +1,11 @@
+package com.resultado_vm.resultado.dtos.response;
+import lombok.Data;
+
+@Data
+public class ClienteResponse {
+    private Long id;
+    private String rut;
+    private String nombre;
+    private String apellido;
+    private String telefono;
+}
